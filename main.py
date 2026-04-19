@@ -28,8 +28,16 @@ class ParticleNyan:
     def __init__(self):
         self.particles = []
         self.size = 12
-        self.image1 = pygame.image.load('pic/theo1.png').convert_alpha()
-        self.image2 = pygame.image.load('pic/theo2.png').convert_alpha()
+
+        try:
+            self.image1 = pygame.image.load('pic/theo1.png').convert_alpha()
+            self.image2 = pygame.image.load('pic/theo2.png').convert_alpha()
+        except Exception as e:
+            print("NYAN IMAGE ERROR:", e)
+            self.image1 = pygame.Surface((50,50))
+            self.image1.fill((255,0,0))
+            self.image2 = self.image1
+
         self.current_image = self.image1
         self.switch = False
         
@@ -66,15 +74,22 @@ async def main():
     screen = pygame.display.set_mode((360, 640))
     clock = pygame.time.Clock()
 
-    # โหลดภาพ
-    bg1 = pygame.transform.scale(pygame.image.load('pic/bg1.png'), (360, 640))
-    bg2 = pygame.transform.scale(pygame.image.load('pic/bg2.png'), (360, 640))
+    print("START GAME")
+
+    try:
+        bg1 = pygame.transform.scale(pygame.image.load('pic/bg1.png'), (360, 640))
+        bg2 = pygame.transform.scale(pygame.image.load('pic/bg2.png'), (360, 640))
+    except Exception as e:
+        print("BG IMAGE ERROR:", e)
+        bg1 = pygame.Surface((360,640))
+        bg1.fill((255,0,0))
+        bg2 = bg1
+
     current_bg = bg1
 
     particle1 = ParticlePrinciple()
     particle2 = ParticleNyan()
 
-    # เสียง
     audio_ready = False
 
     PARTICLE_EVENT = pygame.USEREVENT + 1
@@ -87,11 +102,12 @@ async def main():
 
     running = True
     while running:
+        print("LOOP")  
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            # 🔥 คลิกครั้งแรก = เปิดเสียง
             if event.type == pygame.MOUSEBUTTONDOWN and not audio_ready:
                 try:
                     pygame.mixer.init()
@@ -116,7 +132,6 @@ async def main():
             if event.type == BG_SWITCH_EVENT:
                 current_bg = bg1 if current_bg == bg2 else bg2
 
-        # กันจอดำ
         screen.fill((0,0,0))
         screen.blit(current_bg, (0, 0))
 

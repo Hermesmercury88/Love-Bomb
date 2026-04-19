@@ -1,0 +1,110 @@
+<html lang="en-us">
+
+<script src="https://pygame-web.github.io/cdn/latest/pythons.js"
+        type="module"
+        id="site"
+        data-python="python3.12"
+        data-LINES=42
+        data-COLUMNS=132
+        data-os="vtx,snd,gui"
+        async defer>
+#<!--
+
+import asyncio
+async def custom_site():
+    import platform, embed, sys
+    from pathlib import Path
+
+    platform.document.body.style.background = "#7f7f7f"
+    platform.window.transfer.hidden = True
+    platform.window.canvas.style.visibility = "visible"
+
+    bundle = "theo"
+    appdir = Path(f"/data/data/{bundle}")
+    appdir.mkdir()
+
+    import tarfile
+    async with platform.fopen("theo.tar.gz", "rb") as archive:
+        tar = tarfile.open(fileobj=archive, mode="r:gz")
+        tar.extractall(path=appdir.as_posix())
+        tar.close()
+
+    platform.run_main(PyConfig, loaderhome=appdir/"assets")
+
+    while embed.counter() < 0:
+        await asyncio.sleep(.1)
+
+    main = appdir / "assets" / "main.py"
+
+    if not platform.window.MM.UME:
+        __import__(__name__).__file__ = main
+        platform.window.infobox.innerText = "Click to start"
+        while not platform.window.MM.UME:
+            await asyncio.sleep(.1)
+
+    await TopLevel_async_handler.start_toplevel(platform.shell)
+
+    __import__(__name__).__file__ = main
+    await shell.source(main)
+
+    platform.window.infobox.style.display = "none"
+    platform.window.window_resize()
+
+asyncio.run(custom_site())
+#-->
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>theo</title>
+
+    <!-- ✅ แก้ CDN -->
+    <script>
+    config = {
+        xtermjs: "1",
+        _sdl2: "canvas",
+        archive: "theo",
+
+        /* ✅ เปลี่ยนตรงนี้ */
+        cdn: "https://pygame-web.github.io/cdn/latest/",
+
+        PYBUILD: "3.12",
+        fb_width: "1280",
+        fb_height: "720"
+    }
+    </script>
+
+    <!-- ✅ แก้ browserfs (สำคัญมาก) -->
+    <script src="https://pygame-web.github.io/cdn/latest/browserfs.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            background: black;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+        #infobox {
+            position: fixed;
+            background: green;
+            color: white;
+            padding: 10px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="transfer">
+    <div id="status">Loading...</div>
+    <progress value="0" max="100"></progress>
+</div>
+
+<canvas id="canvas"></canvas>
+<div id="infobox">Loading...</div>
+
+</body>
+</html>
